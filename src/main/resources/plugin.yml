@@ -1,0 +1,4 @@
+name: MixGame
+version: '1.0.0'
+main: com.astaro.mixGame.MixGame
+api-version: '1.21'
