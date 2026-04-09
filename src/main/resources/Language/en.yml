@@ -1,0 +1,93 @@
+PlayerMessages:
+  playerJoin: '&e%player% &ajoin to the arena!'
+  playerLeft: '&e%player% &cleft from the arena!'
+  playerLose: '&e%player% &cfell from the arena!'
+  join: '&aYou succesfully joined arena %arena%'
+  leave: '&aYou left the arena: &2%arena%'
+  notInArena: '&cYou are not in the arena!'
+  winner: "&c%player% win the game!"
+  spectate: "&cYou fall. Now u can spectate."
+AdminMessages:
+  sessionStart: '&eSetup session started!'
+  sessionEnd: '&eSetup session ended succesfully!'
+  setFirstPos: '&eFirst position set'
+  setSecondPos: '&eSecond position set'
+  setSpawnLocation: '&aSuccessfully set spawn location!'
+  setEndLocation: '&aSuccessfully set end location!'
+  setLobbyLocation: '&aSuccessfully set lobby location!'
+  setArenaRegion: '&aSuccessfully set arena region!'
+  setCollision: '&aSuccessfully set collisions!'
+  arenaEdited: '&aYou have successfully edited the arena!'
+  arenaCreated: '&aYou have successfully created arena - %arena%!'
+  canceledCreatingArena: '&aSuccessfully canceled creating arena!'
+  setFloorMaterial: '&aFloor material has been successfully set!'
+  setMinPlayers: '&aSuccessfully set minimum players!'
+  setMaxPlayers: '&aSuccessfully set maximum players!'
+  setLevel: '&aSuccessfully set difficulty level!'
+  signWasRemoved: '&aThis sign was removed!'
+  setupCancelled: '&cArena setup cancelled'
+ErrorMessages:
+  sessionError: '&eEdit session error!'
+  emptySession: '&eThere is no active create or edit session!'
+  emptyOrOnePoint: '&cYou must selected two points using the sharper!'
+  flatSelection: '&cSelected region of arena is flat! Please select game zone/movement zone of players'
+  noSuchArena: '&cYou have to create an arena /cfm create <arenaName> or /cfm edit <existArenaName>'
+  levelError: "&Level can't be less then 1 or greater than 5"
+  minGreaterMax: '&cMaximum number of players can not be less than the minimum number of players!'
+  noConfig: '&cNot set: '
+  error: '&cArena is not exists or undefined error! Contact administrators.'
+  noPermission: '&cNo permission'
+  warnSignIsNot: '&cThis is not a sign!'
+  warnSignIsNotOfArena: '&cThis is not an arena sign!'
+  arenaEditing: '&cArena is editing now!'
+  arenaFull: '&cArena is full'
+  setupIncomplete: '&cError! Setup incomplete.'
+  playerCountError: '&cInvalid player limits! Player count can be between 2 and 16'
+  notInArena: "&cYou are not in arena or queue"
+InfoMessages:
+  listOfArenas: '&cList of arenas:'
+  playedGames: '&9Number of games played: &c'
+  level: '&9Level: &c'
+  points: '&9Points: &c'
+  won: '&9Won: &c'
+  lost: '&9Lost: &c'
+  wwinRate: '&9The ratio of winnings to losers (wlr): &c'
+HelpMessages:
+  adminHelp:
+    - '<--- &cMixGame &eAdmin Help --->'
+    - '&cCreate arena: &f/colorfulmix create <arenaName>'
+    - '&cEdit arena: &f/colorfulmix edit <arenaName>'
+    - '&cSet Floor Material: &f/colorfulmix setFloorMaterial <WOOL, CLAY, CONCRETE, MIX>'
+    - '&cSet sign: &f/colorfulmix setSign <arenaName>'
+    - '&cSets min players: &f/colorfulmix setMinPlayers <count>'
+    - '&cSets max players: &f/colorfulmix setMaxPlayers <count>'
+    - '&cSet difficulty level: &f/colorfulmix setLevel <1-5>'
+    - '&cSet size of section: &f/colorfulmix setSectionSize <1-5>'
+    - '&cSet color limits: &f/colorfulmix setColorLimit <2-16>'
+    - '&cSet collision: &f/colorfulmix setCollision <true, false>'
+    - '&cDelete an arena: &f/cfm delete <arenaName>'
+    - '&7(Use these commands to fully setup your arena)'
+  playerHelp:
+    - '<--- &cMixGame &eHelp --->'
+    - '&cTo join an arena: &f/mixgame join <arenaName>'
+    - '&cTo leave an arena: &f/mixgame leave'
+    - '&cShow stats: &f/mixgame stats'
+Titles:
+  roundStart:
+    title: "<gold>РАУНД %round%"
+    subtitle: "<white>Приготовьтесь бежать!"
+    fadeIn: 10
+    stay: 40
+    fadeOut: 10
+  winner:
+    title: "<yellow>ПОБЕДА!"
+    subtitle: "<white>Игрок <green>%player%</green> выиграл матч"
+    fadeIn: 20
+    stay: 100
+    fadeOut: 20
+  loser:
+    title: "<yellow>Вы проиграли!"
+    subtitle: "<white>Теперь вы наблюдатель."
+    fadeIn: 20
+    stay: 100
+    fadeOut: 20

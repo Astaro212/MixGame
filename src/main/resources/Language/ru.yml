@@ -1,0 +1,90 @@
+PlayerMessages:
+  playerJoin: '&8[&a+&8] &e%player% &7присоединился к игре!'
+  playerLeft: '&8[&c-&8] &e%player% &7покинул арену.'
+  playerLose: '&7Игрок &e%player% &cне удержался и упал!'
+  join: '&aВы успешно вошли на арену &2%arena%&a. Удачи!'
+  leave: '&cВы покинули арену &6%arena%&c.'
+  notInArena: '&cВы не находитесь в игре!'
+  winner: '&6&lПОБЕДА! &e%player% &fстановится чемпионом этой игры!'
+  spectate: '&7Вы выбыли из гонки. Режим наблюдателя &aактивирован&7.'
+AdminMessages:
+  sessionStart: '&e&l[!] &fСессия настройки арены &aначата&f.'
+  sessionEnd: '&e&l[!] &fНастройка завершена. Все изменения &6сохранены&f.'
+  setFirstPos: '&b[1] &fПервая точка установлена.'
+  setSecondPos: '&b[2] &fВторая точка установлена.'
+  setSpawnLocation: '&aТочка появления игроков установлена!'
+  setEndLocation: '&aТочка выхода с арены установлена!'
+  setLobbyLocation: '&aТочка лобби установлена!'
+  setArenaRegion: '&aРегион арены успешно определен!'
+  setCollision: '&fКоллизии игроков: &e%state%'
+  arenaEdited: '&aАрена &e%arena% &aуспешно обновлена!'
+  arenaCreated: '&aАрена &e%arena% &aсоздана и готова к настройке!'
+  canceledCreatingArena: '&7Создание арены отменено.'
+  setFloorMaterial: '&fТип блоков пола изменен на: &e%material%'
+  setMinPlayers: '&fМинимум игроков теперь: &e%count%'
+  setMaxPlayers: '&fМаксимум игроков теперь: &e%count%'
+  setLevel: '&fУровень сложности изменен на: &e%level%'
+  signWasRemoved: '&7Табличка арены удалена.'
+  setupCancelled: '&cНастройка прервана.'
+ErrorMessages:
+  sessionError: '&cОшибка сессии! Попробуйте перезайти в режим настройки.'
+  emptySession: '&cУ вас нет активной сессии редактирования!'
+  emptyOrOnePoint: '&cНеобходимо выделить две точки топором!'
+  flatSelection: '&cОшибка! Выделенный регион плоский. Выделите объемную зону игры.'
+  noSuchArena: '&cТакой арены не существует. Создайте её: &f/cfm create <название>'
+  levelError: '&cСложность должна быть в диапазоне от &f1 &cдо &f5&c!'
+  minGreaterMax: '&cМинимум игроков не может быть больше максимума!'
+  noConfig: '&cНе настроен обязательный параметр: &f'
+  error: '&cПроизошла критическая ошибка! Сообщите администратору.'
+  noPermission: '&cУ вас недостаточно прав для этой команды.'
+  warnSignIsNot: '&cЭтот блок не является табличкой!'
+  warnSignIsNotOfArena: '&cЭта табличка не привязана к арене!'
+  arenaEditing: '&cНа этой арене сейчас ведутся технические работы.'
+  arenaFull: '&cК сожалению, все места на арене заняты.'
+  setupIncomplete: '&cНевозможно запустить: настройка арены не завершена!'
+  playerCountError: '&cЛимит игроков должен быть от &f2 &cдо &f16&c.'
+  notInArena: '&cВы должны быть на арене, чтобы сделать это.'
+InfoMessages:
+  listOfArenas: '&6&lСписок доступных арен:'
+  playedGames: '&fСыграно игр: &b'
+  level: '&fСложность: &e'
+  points: '&fОчки: &a'
+  won: '&fПобед: &a'
+  lost: '&fПоражений: &c'
+  wwinRate: '&fПроцент побед (WLR): &d'
+HelpMessages:
+  adminHelp:
+    - '&8&m      &r &c&lMixGame &eАдмин-Помощь &8&m      '
+    - '&c• &f/cfm create <название> &7- создать арену'
+    - '&c• &f/cfm edit <название> &7- редактировать'
+    - '&c• &f/cfm setFloorMaterial <тип> &7- материал пола'
+    - '&c• &f/cfm setMinPlayers/setMaxPlayers &7- лимиты'
+    - '&c• &f/cfm setLevel <1-5> &7- сложность'
+    - '&c• &f/cfm setSectionSize <1-5> &7- размер плитки'
+    - '&c• &f/cfm delete <название> &7- удалить арену'
+    - '&8&m--------------------------------'
+  playerHelp:
+    - '&8&m      &r &c&lMixGame &eПомощь &8&m      '
+    - '&c• &f/mixgame join <название> &7- войти в игру'
+    - '&c• &f/mixgame leave &7- выйти из игры'
+    - '&c• &f/mixgame stats &7- ваша статистика'
+    - '&8&m---------------------------'
+Titles:
+  roundStart:
+    title: "<gradient:#FFD700:#FFA500><bold>РАУНД %round%</bold></gradient>"
+    subtitle: "<white>Приготовьтесь, блоки скоро <red>исчезнут</red>!"
+    fadeIn: 10
+    stay: 40
+    fadeOut: 10
+  winner:
+    title: "<gradient:#55FF55:#FFFF55><bold>ПОБЕДА!</bold></gradient>"
+    subtitle: "<white>Игрок <yellow>%player%</yellow> забирает кубок!"
+    fadeIn: 20
+    stay: 100
+    fadeOut: 20
+  loser:
+    title: "<gradient:#FF5555:#AA0000><bold>ВЫ ВЫБЫЛИ!</bold></gradient>"
+    subtitle: "<gray>Не повезло в этот раз. Теперь вы зритель.</gray>"
+    fadeIn: 20
+    stay: 80
+    fadeOut: 20

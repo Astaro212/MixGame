@@ -2,3 +2,10 @@ name: MixGame
 version: '1.0.0'
 main: com.astaro.mixGame.MixGame
 api-version: '1.21'
+softdepend: [NoteBlockAPI, ServerManager-Paper]
+
+commands:
+  colorfulmix:
+    description: Manage a colorfulmix plugin
+    usage: /colorfulmix
+    aliases: [cfm]

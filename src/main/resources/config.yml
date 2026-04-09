@@ -1,0 +1,72 @@
+### Do not touch
+config-version: '1.0.0'
+
+# language (available: ru/en)
+lang: 'ru'
+
+# bossbar enabled (true/false)
+bossbar:
+  enabled: true
+# bossbar color
+  color: PINK
+
+# countdown in lobby
+lobby-countdown: 30
+
+# countdown before game starts (after players teleported to arena)
+game-countdown: 10
+# MySQL/SQLite
+database:
+  type: SQLite
+  # Settings for MySQL
+  host: localhost
+  database: minecraft
+  username: root
+  password: superpassword
+  port: 3306
+  table: blockparty
+
+WhitelistedCommands:
+  - msg
+  - r
+  - w
+# Enable or disable expbar
+expbar: true
+
+# Points to level up (logic: 1 lvl -> 25, 2lvl -> 50 + lvl1 points, etc)
+points-to-level: 25
+
+# save inventory?
+save-inventory: true
+# save exp?
+save-exp: true
+# scoreboard
+scoreboard:
+  enabled: true
+  contents:
+
+# TabList with stats (Require ProtocolLib & TAB) (true/false)
+tablist: true
+
+# TitleText
+titlettext: true
+
+# Rewards (only commands, for example eco give %player% 10, minecraft:give %player% diamond 1)
+rewards:
+  enabled: true
+  per-round-rewards:
+    - minecraft:give %player% diamond 1
+  per-game-rewards:
+    - minecraft:give %player% diamond 1
+  winner-rewards:
+    - minecraft:give %player% diamond 1
+
+# Leave settings
+leave:
+  item: WHITE_BED
+
+# Songs settings
+songs:
+  lobby: true
+  arena: true
+
