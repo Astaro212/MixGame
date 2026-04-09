@@ -1,4 +1,4 @@
-package com.astaro.mixGame.Setup;
+package com.astaro.mixGame.Signs;
 
 
 import org.bukkit.Location;
