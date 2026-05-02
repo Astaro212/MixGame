@@ -68,9 +68,9 @@ public class GameTask extends BukkitRunnable {
         };
 
         int totalSections = controller.getFloorManager().getSectionsCount();
-        int correctCount = Math.max(1, (totalSections / 6)  - (controller.getCurrentRound() / 2));
+        int correctCount = Math.max(1, (totalSections / 8)  - (controller.getCurrentRound() / 2));
         if (controller.getCurrentRound() > 10) {
-            correctCount = ThreadLocalRandom.current().nextInt(1, 3);
+            correctCount = ThreadLocalRandom.current().nextInt(3, 6);
         }
 
         controller.getFloorManager().generateNewFloor(luckyMaterial, pool, correctCount);
@@ -85,7 +85,7 @@ public class GameTask extends BukkitRunnable {
         int baseTime = 7;
 
         if (controller.getCurrentRound() >= 5) {
-            int reduction = (controller.getCurrentRound() - 3) / 2;
+            int reduction = (controller.getCurrentRound() - 1) / 2;
             baseTime -= reduction;
         }
 

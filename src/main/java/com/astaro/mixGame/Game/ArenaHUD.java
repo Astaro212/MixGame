@@ -11,11 +11,17 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class ArenaHUD {
 
 
     private final ArenaController controller;
     private BossBar bossBar;
+
+    private final Map<UUID, Map<Integer, String>> lastScores = new HashMap<>();
 
     public ArenaHUD(ArenaController controller) {
         this.controller = controller;
@@ -53,7 +59,7 @@ public class ArenaHUD {
     // --- SCOREBOARD LOGIC ---
 
     public void updateSidebar() {
-        String title = "<gradient:#ff55ff:#55ffff><bold>MixGame</bold></gradient>";
+        String title = "&c&lM&6&lI&e&lX&a&lG&b&lA&9&lM&d&lE";
 
         for (Player p : controller.getBukkitPlayers()) {
             Scoreboard board = p.getScoreboard();
@@ -69,23 +75,33 @@ public class ArenaHUD {
                 obj.setDisplaySlot(DisplaySlot.SIDEBAR);
             }
 
-            replaceScore(obj, "&7Арена: &f" + controller.getSettings().arenaName(), 3);
-            replaceScore(obj, "&7Игроки: &a" + controller.getBukkitPlayers().size() + "/" + controller.getSettings().maxPlayers(), 2);
-            replaceScore(obj, "&7Раунд: &e" + controller.getCurrentRound(), 1);
-            replaceScore(obj, "&8--------------", 0);
+            replaceScore(p,obj, "&7Арена: &f" + controller.getSettings().arenaName(), 3);
+            replaceScore(p,obj, "&7Игроки: &a" + controller.getBukkitPlayers().size() + "/" + controller.getSettings().maxPlayers(), 2);
+            replaceScore(p,obj, "&7Раунд: &e" + controller.getCurrentRound(), 1);
+            replaceScore(p, obj, "&8--------------", 0);
         }
     }
 
-    private void replaceScore(Objective obj, String text, int score) {
-        Component component = ChatService.parse(text, null);
-        String legacyText = LegacyComponentSerializer.legacySection()
-                .serialize(component);
-        obj.getScore(legacyText).resetScore();
-        obj.getScore(legacyText).setScore(score);
+    private void replaceScore(Player p, Objective obj, String text, int score) {
+        Component component = ChatService.parse(text, p);
+        String newLegacyText = LegacyComponentSerializer.legacySection().serialize(component);
+
+        Map<Integer, String> playerMap = lastScores.computeIfAbsent(p.getUniqueId(), k -> new HashMap<>());
+        String oldLegacyText = playerMap.get(score);
+
+        if (newLegacyText.equals(oldLegacyText)) return;
+
+        if (oldLegacyText != null) {
+            obj.getScoreboard().resetScores(oldLegacyText);
+        }
+
+        obj.getScore(newLegacyText).setScore(score);
+        playerMap.put(score, newLegacyText);
     }
 
     public void clearHUD(Player player) {
-        player.hideBossBar(bossBar);
+        if (bossBar != null) player.hideBossBar(bossBar);
         player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        lastScores.remove(player.getUniqueId());
     }
 }

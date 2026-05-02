@@ -11,9 +11,12 @@ import com.astaro.mixGame.config.CommandManager;
 import com.astaro.mixGame.config.Config;
 import com.astaro.mixGame.services.*;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import ru.plasticable.servermanager.model.ServerState;
+import ru.plasticable.servermanager.plugin.paper.ServerManagerPaperPlugin;
 
 public final class MixGame extends JavaPlugin {
 
@@ -21,6 +24,7 @@ public final class MixGame extends JavaPlugin {
 
     public static MixGame instance;
     public static LoggerService loggerService;
+
 
     private SettingsService settingsService;
     private ChatService chatService;
@@ -33,6 +37,11 @@ public final class MixGame extends JavaPlugin {
 
     private NotificationService notificationService;
     private MusicService musicService;
+    private PlaceholderService placeholderService;
+
+    private ServerManagerPaperPlugin serverManager;
+
+    private GameListener gameListener;
 
 
     @Override
@@ -48,6 +57,14 @@ public final class MixGame extends JavaPlugin {
         chatService.load(this.getConfig().getString("lang", "ru"));
         databaseService = new DatabaseService(this);
         databaseService.connect();
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            placeholderService = new PlaceholderService(this);
+            placeholderService.register();
+        }
+        if (getServer().getPluginManager().isPluginEnabled("ServerManagerPlugin")) {
+            getLogger().info("DEBUG: My Server ID is: [" + serverManager.getServerId() + "]");
+            serverManager = (ServerManagerPaperPlugin) getServer().getPluginManager().getPlugin("ServerManagerPlugin");
+        }
         notificationService = new NotificationService(this);
         musicService = new MusicService(this);
         musicService.loadSongs();
@@ -65,7 +82,8 @@ public final class MixGame extends JavaPlugin {
         });
 
         var pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new GameListener(this), this);
+        this.gameListener = new GameListener(this);
+        pluginManager.registerEvents(gameListener, this);
         pluginManager.registerEvents(new SelectionListener(this), this);
         pluginManager.registerEvents(new SignListener(this), this);
         pluginManager.registerEvents(new TabListener(this), this);
@@ -76,12 +94,25 @@ public final class MixGame extends JavaPlugin {
                                 + this.getPluginMeta().getVersion() + "</white> <green>is now enabled!</green>"
                 )
         );
-
+        if (this.serverManager != null) {
+            serverManager.setServerState(ServerState.WAITING_FOR_PLAYERS);
+        }
     }
 
     @Override
     public void onDisable() {
+        this.databaseService.close();
+    }
 
+    public void reload(){
+        settingsService.reload();
+        chatService.load(this.getConfig().getString("lang", "en"));
+        Bukkit.getConsoleSender().sendMessage(
+                MiniMessage.miniMessage().deserialize(
+                        "<gradient:#ff5555:#ffaa00:#55ff55>MixGame</gradient> <white>"
+                                + this.getPluginMeta().getVersion() + "</white> <green>reloaded!</green>"
+                )
+        );
     }
 
     public Config getSettings() {
@@ -121,8 +152,20 @@ public final class MixGame extends JavaPlugin {
 
     }
 
+    public GameListener getGameListener() {
+        return this.gameListener;
+    }
+
     public DatabaseService getDatabase() {
         return this.databaseService;
+    }
+
+    public PlaceholderService getPlaceholderService() {
+        return this.placeholderService;
+    }
+
+    public ServerManagerPaperPlugin getServerManager() {
+        return this.serverManager;
     }
 
 }

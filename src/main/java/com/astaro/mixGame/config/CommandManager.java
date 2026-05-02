@@ -90,11 +90,19 @@ public class CommandManager {
                         })
                 );
     }
+
     // TODO: Add EDIT part
     public static void createAdminCommands(LiteralArgumentBuilder<CommandSourceStack> root) {
 
         LiteralArgumentBuilder<CommandSourceStack> adminNode = Commands.literal("admin")
                 .requires(s -> s.getSender().hasPermission("mixgame.admin"));
+
+        adminNode.then(Commands.literal("reload").executes(
+                ctx -> {
+                    plugin.reload();
+                    return Command.SINGLE_SUCCESS;
+                }
+        ));
 
         adminNode.then(Commands.literal("create")
                 .then(Commands.argument("arenaName", StringArgumentType.word())

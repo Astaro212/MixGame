@@ -50,7 +50,7 @@ public class ChatService {
 
 
     public Object getRaw(String path) {
-        return lang.get(path, "Missing message: " + path);
+        return lang.get(path, "E:" + path);
     }
 
     public void sendMessage(Player player, String path, String... replacements) {
@@ -80,7 +80,7 @@ public class ChatService {
         String processedText = replacePlaceholders(text, replacements);
         Bukkit.getOnlinePlayers().forEach(player -> {
             sendProcessedMessage(player, processedText);
-            sendActionBar(player, processedText);
+            player.sendActionBar(parse(processedText, player));
         });
     }
 
@@ -127,7 +127,7 @@ public class ChatService {
 
     public void sendTabList(Player player) {
         Component header = parse("<gradient:#FF55FF:#FFFF55:#FF5555><bold>MixGame</bold></gradient>\n", player);
-        Component footer = parse("\n<gray>Версия: <white>2.3.2</white></gray>\n<aqua>://yourserver.com</aqua>", player);
+        Component footer = parse("\n<gray>Версия: <white>2.3.2</white>", player);
 
         player.sendPlayerListHeaderAndFooter(header, footer);
     }

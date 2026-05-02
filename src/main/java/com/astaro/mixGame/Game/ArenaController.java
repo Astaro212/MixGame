@@ -4,12 +4,14 @@ import com.astaro.mixGame.MixGame;
 import com.astaro.mixGame.data.PlayerSession;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import ru.plasticable.servermanager.model.ServerState;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -132,11 +134,16 @@ public class ArenaController {
                     if (!success) {
                         Bukkit.getScheduler().runTask(plugin, () -> p.teleport(spawn));
                     }
+                    p.closeInventory();
+                    plugin.getGameListener().startBlinkChecker();
                 });
             }
         }
 
         startMusic(false);
+        if(plugin.getServerManager() != null){
+            plugin.getServerManager().setServerState(ServerState.BUSY);
+        }
     }
 
     public void updateProgress(GameTask.GamePhase phase, int time) {
@@ -147,7 +154,7 @@ public class ArenaController {
             case LOBBY -> {
                 msg = "Старт через: <white>" + time + "с.";
                 progress = (float) time / plugin.getSettings().lobbyCountdown();
-                color =  BossBar.Color.GREEN;
+                color = BossBar.Color.GREEN;
             }
             case SHOWING_COLOR -> msg = "Цвет: " + time;
             default -> msg = "Приготовьтесь!";
@@ -199,7 +206,7 @@ public class ArenaController {
         if (status == ArenaStatus.PLAYING) {
             List<Player> alive = getBukkitPlayers();
             if (alive.size() <= 1) {
-                stopGame(alive.isEmpty() ? null : alive.get(0));
+                stopGame(alive.isEmpty() ? null : alive.getFirst());
             }
         }
 
@@ -220,7 +227,7 @@ public class ArenaController {
 
         double minX = Math.min(settings.arenaLoc1().getX(), settings.arenaLoc2().getX()) - 1.5;
         double maxX = Math.max(settings.arenaLoc1().getX(), settings.arenaLoc2().getX()) + 1.5;
-        double minY = Math.min(settings.arenaLoc1().getY(), settings.arenaLoc2().getY())- 0.5;
+        double minY = Math.min(settings.arenaLoc1().getY(), settings.arenaLoc2().getY()) - 0.5;
         double maxY = Math.max(settings.arenaLoc1().getY(), settings.arenaLoc2().getY()) + 10.0;
         double minZ = Math.min(settings.arenaLoc1().getZ(), settings.arenaLoc2().getZ()) - 1.5;
         double maxZ = Math.max(settings.arenaLoc1().getZ(), settings.arenaLoc2().getZ()) + 1.5;
@@ -238,14 +245,16 @@ public class ArenaController {
         UUID uuid = player.getUniqueId();
         if (!players.contains(uuid)) return;
 
-       plugin.getNotificationService().sendTitle(player, "Titles.loser", "%player%", player.getName());
+        plugin.getNotificationService().sendTitle(player, "Titles.loser", "%player%", player.getName());
 
         setSpectators(player);
+        plugin.getDatabase().updateStatsAsync(player.getName(), 0, 0, 1);
 
         List<Player> alive = getBukkitPlayers();
         if (alive.size() <= 1) {
-            Player winner = alive.isEmpty() ? null : alive.get(0);
+            Player winner = alive.isEmpty() ? null : alive.getFirst();
             stopGame(winner);
+            plugin.getDatabase().updateStatsAsync(player.getName(), 25, 1, 0);
         }
     }
 
@@ -254,6 +263,7 @@ public class ArenaController {
 
         for (String cmd : commands) {
             String finalCmd = cmd.replace("/", "").replace("%player%", winner.getName());
+            winner.sendMessage(Component.text("Вы получили 100 коинов за победу!"));
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCmd);
         }
     }
@@ -295,7 +305,7 @@ public class ArenaController {
         return this.mixed;
     }
 
-    public ArenaHUD  getArenaHUD() {
+    public ArenaHUD getArenaHUD() {
         return arenaHUD;
     }
 

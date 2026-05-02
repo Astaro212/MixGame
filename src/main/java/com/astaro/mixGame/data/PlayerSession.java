@@ -19,9 +19,14 @@ public record PlayerSession(
 ) {
 
     public static PlayerSession create(Player player) {
+        ItemStack[] contents = player.getInventory().getContents();
+        ItemStack[] contentsCopy = new ItemStack[contents.length];
+        for (int i = 0; i < contents.length; i++) {
+            if (contents[i] != null) contentsCopy[i] = contents[i].clone();
+        }
         return new PlayerSession(
                 player.getUniqueId(),
-                player.getInventory().getContents(),
+                contentsCopy,
                 player.getLevel(),
                 player.getExp(),
                 player.getGameMode(),

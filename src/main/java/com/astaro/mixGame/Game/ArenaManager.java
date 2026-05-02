@@ -65,9 +65,6 @@ public class ArenaManager {
         if (arenaName != null) {
             ArenaController controller = arenas.get(arenaName);
             if (controller != null) {
-                if (controller.getBukkitPlayers().contains(player)) {
-                    controller.eliminatePlayer(player);
-                }
                 controller.leave(player);
             }
         }
