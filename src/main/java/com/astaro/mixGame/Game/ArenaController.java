@@ -31,6 +31,7 @@ public class ArenaController {
     private ArenaStatus status = ArenaStatus.WAITING;
     private int currentRound = 0;
     private int timer;
+    private Integer statusCheckTaskId;
 
 
     private Material currentMaterial;
@@ -43,11 +44,46 @@ public class ArenaController {
         this.arenaHUD = new ArenaHUD(this);
         this.timer = plugin.getSettings().lobbyCountdown();
         this.mixed = plugin.getFloorService().getMixedList();
+        this.statusCheckTaskId = Bukkit.getScheduler().runTaskTimer(
+                plugin, this::checkStatus, 0L, 100L
+        ).getTaskId();
     }
 
-    public void startRound() {
-        this.status = ArenaStatus.STARTING;
-        this.currentRound++;
+    private void checkStatus() {
+        if (plugin.getServerManager() == null) return;
+
+        if (plugin.getServerManager().getServerState() == ServerState.BUSY) {
+            if (this.players.isEmpty() && this.spectators.isEmpty()) {
+                if (this.status != ArenaStatus.WAITING) {
+                    this.status = ArenaStatus.WAITING;
+                    plugin.getServerManager().setServerState(ServerState.WAITING_FOR_PLAYERS);
+                    if (gameTask != null) {
+                        gameTask.cancel();
+                        gameTask = null;
+                    }
+                    this.timer = plugin.getSettings().lobbyCountdown();
+                }
+            }
+        }
+        if (this.status == ArenaStatus.PLAYING && players.isEmpty()) {
+            if (!spectators.isEmpty()) {
+                this.status = ArenaStatus.ENDING;
+                stopGame(null);
+                MixGame.loggerService.warn("Игра завершена: не осталось активных игроков");
+            } else {
+                resetArena();
+            }
+        }
+    }
+
+    public void shutdown() {
+        if (statusCheckTaskId != null) {
+            Bukkit.getScheduler().cancelTask(statusCheckTaskId);
+        }
+        if (gameTask != null) {
+            gameTask.cancel();
+        }
+        stopMusic();
     }
 
     public void stopGame(Player winner) {
@@ -79,6 +115,9 @@ public class ArenaController {
         this.spectators.clear();
         this.sessions.clear();
         floorManager.reset();
+        if (plugin.getServerManager() != null) {
+            plugin.getServerManager().setServerState(ServerState.WAITING_FOR_PLAYERS);
+        }
     }
 
 
@@ -141,7 +180,7 @@ public class ArenaController {
         }
 
         startMusic(false);
-        if(plugin.getServerManager() != null){
+        if (plugin.getServerManager() != null) {
             plugin.getServerManager().setServerState(ServerState.BUSY);
         }
     }
@@ -214,6 +253,7 @@ public class ArenaController {
         if (players.isEmpty() && spectators.isEmpty() && status != ArenaStatus.WAITING) {
             resetArena();
         }
+
     }
 
 
@@ -253,8 +293,12 @@ public class ArenaController {
         List<Player> alive = getBukkitPlayers();
         if (alive.size() <= 1) {
             Player winner = alive.isEmpty() ? null : alive.getFirst();
-            stopGame(winner);
-            plugin.getDatabase().updateStatsAsync(player.getName(), 25, 1, 0);
+            if (winner != null) {
+                stopGame(winner);
+                plugin.getDatabase().updateStatsAsync(winner.getName(), 25, 1, 0);
+            } else {
+                stopGame(null);
+            }
         }
     }
 

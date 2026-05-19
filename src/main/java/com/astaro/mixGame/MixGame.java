@@ -4,6 +4,7 @@ import com.astaro.mixGame.Events.GameListener;
 import com.astaro.mixGame.Events.SelectionListener;
 import com.astaro.mixGame.Events.SignListener;
 import com.astaro.mixGame.Events.TabListener;
+import com.astaro.mixGame.Game.ArenaController;
 import com.astaro.mixGame.Game.ArenaManager;
 import com.astaro.mixGame.Setup.SetupManager;
 import com.astaro.mixGame.Signs.SignManager;
@@ -61,7 +62,7 @@ public final class MixGame extends JavaPlugin {
             placeholderService = new PlaceholderService(this);
             placeholderService.register();
         }
-        if (getServer().getPluginManager().isPluginEnabled("ServerManagerPlugin")) {
+        if (getServer().getPluginManager().isPluginEnabled("ServerManagerPlugin") && getServer().getPluginManager().getPlugin("ServerManagerPlugin") != null) {
             getLogger().info("DEBUG: My Server ID is: [" + serverManager.getServerId() + "]");
             serverManager = (ServerManagerPaperPlugin) getServer().getPluginManager().getPlugin("ServerManagerPlugin");
         }
@@ -102,6 +103,12 @@ public final class MixGame extends JavaPlugin {
     @Override
     public void onDisable() {
         this.databaseService.close();
+        if(!arenaManager.getAllArenas().isEmpty()) {
+            arenaManager.getAllArenas().forEach(ArenaController::shutdown);
+        }
+        if (this.serverManager != null) {
+            serverManager.setServerState(ServerState.SHUTTING_DOWN);
+        }
     }
 
     public void reload(){
